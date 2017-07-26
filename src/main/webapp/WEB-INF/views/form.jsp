@@ -10,5 +10,13 @@
 
 <body>
 	<h2>Hello World!</h2>
+	
+	${name}
+	
+	<sf:form action="form" method="post" modelAttribute="user">
+		name:<sf:input path="name" /><sf:errors path="name" /><br/>
+		<input type="submit" value="提交" />&nbsp;<input type="reset" value="重置" />
+	</sf:form>
+	
 </body>
 </html>

@@ -1,10 +1,12 @@
 package com.mvc.api;
 
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
 
 @Component
 public class User {
-
+	
+	@NotEmpty(message="用户名不能为空")
 	String name;
 	
 	public User() {}
