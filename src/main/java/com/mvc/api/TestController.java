@@ -1,5 +1,8 @@
 package com.mvc.api;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,16 @@ public class TestController {
 	public ModelAndView model() {
 		ModelAndView view = new ModelAndView("hello");
 		view.addObject("aKey", "aValue");
+		return view;
+	}
+	
+	@RequestMapping("/modelList")
+	public ModelAndView modelList() {
+		ModelAndView view = new ModelAndView("helloList");
+		List list = new ArrayList();
+		list.add("abc");
+		view.addObject("dd", list);
+		view.addObject("test", "abc");
 		return view;
 	}
 	
