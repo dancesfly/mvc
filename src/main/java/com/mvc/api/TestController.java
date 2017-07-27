@@ -1,15 +1,19 @@
 package com.mvc.api;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,6 +25,15 @@ public class TestController {
 
 	@Autowired
 	private User user;
+	
+	@InitBinder
+	protected void initBinder(ServletRequestDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		CustomDateEditor dateEditor = new CustomDateEditor(dateFormat, true);
+		binder.registerCustomEditor(java.sql.Date.class, dateEditor);
+		binder.registerCustomEditor(java.util.Date.class, dateEditor);
+	}
 	
 	@RequestMapping("/hello")
 	@ResponseBody
@@ -63,6 +76,7 @@ public class TestController {
 	@RequestMapping(value="/form",method=RequestMethod.GET)
 	public String form(@ModelAttribute("user") User user) {
 		System.out.println("get");
+		System.out.println(user.name);
 		return "form";
 	}
 	
@@ -73,6 +87,7 @@ public class TestController {
 		}
 		System.out.println("post");
 		user.setName("post");
+		System.out.println(user.date);
 		return "form";
 	}
 	
