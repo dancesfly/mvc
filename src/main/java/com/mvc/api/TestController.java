@@ -1,9 +1,9 @@
 package com.mvc.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import javax.validation.Valid;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,13 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import com.sun.xml.internal.bind.v2.runtime.BinderImpl;
 
 @Controller
 public class TestController {
@@ -25,7 +22,7 @@ public class TestController {
 	@Autowired
 	private User user;
 	
-	@RequestMapping("/test")
+	@RequestMapping("/hello")
 	@ResponseBody
 	public String test() {
 		return "hello";
@@ -84,6 +81,23 @@ public class TestController {
 		//model.addAttribute(new User());
 		user.setName("post");
 		model.addAttribute("name", "vivi");
+		//model.addAttribute("command", user);
 		return "form";
+	}
+	
+	@RequestMapping("/in2")
+	public ModelAndView in2() {
+		return new ModelAndView("redirect:hello");
+	}
+	
+	@RequestMapping("/map")
+	public ModelAndView map() {
+		ModelAndView view = new ModelAndView("hello");
+		Map map = new HashMap<String, User>();
+		User user = new User();
+		user.setName("mapUser");
+		map.put("user", user);
+		view.addObject("user", map);
+		return view;
 	}
 }

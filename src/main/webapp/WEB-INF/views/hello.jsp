@@ -8,5 +8,7 @@
 </head>
 <body>
 	${akey}
+	---ddd-
+	${user.user.name}
 </body>
 </html>
