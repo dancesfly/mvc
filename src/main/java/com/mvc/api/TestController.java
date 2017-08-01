@@ -1,10 +1,17 @@
 package com.mvc.api;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -36,7 +43,6 @@ public class TestController {
 	}
 	
 	@RequestMapping("/hello")
-	@ResponseBody
 	public String test() {
 		return "hello";
 	}
@@ -74,20 +80,56 @@ public class TestController {
 	}
 	
 	@RequestMapping(value="/form",method=RequestMethod.GET)
-	public String form(@ModelAttribute("user") User user) {
-		System.out.println("get");
-		System.out.println(user.name);
+	public String form(@ModelAttribute("user") User user, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String value = request.getHeader("Accept-Encoding");
+		//System.out.println(value);
+		HttpSession session = request.getSession();
+		String sessionId = session.getId();
+		if(session.isNew()) {
+			System.out.println("session创建成功 id:" + sessionId);
+		}else {
+			System.out.println("session已存在 id:" + sessionId);
+		}
+		
+		response.getWriter().print("hello vivi");
+		
 		return "form";
 	}
 	
 	@RequestMapping(value="/form",method=RequestMethod.POST)
-	public String form(@Validated User user, BindingResult br) {
+	public String form(@Validated User user, BindingResult br, HttpServletRequest request, 
+			HttpServletResponse response) throws ServletException, IOException {
+		String vivi = null;
+		
+		Map<String, String[]> paramMap = request.getParameterMap();
+		for(Map.Entry<String, String[]> entry :paramMap.entrySet()) {
+			String paramName = entry.getKey();
+			System.out.println(paramName);
+			String[] paramValueArr = entry.getValue();
+			
+			for(String paramValue: paramValueArr) {
+				System.out.println(paramValue);
+			}			
+		}
+		
+		//RequestDispatcher reqDispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
+		//reqDispatcher.forward(request, response);
+		
 		if(br.hasErrors()) {
 			user.setName("wrong");
 		}
-		System.out.println("post");
-		user.setName("post");
-		System.out.println(user.date);
+		//user.setName("post");
+		request.setAttribute("hello", "hellovivi");
+		//System.out.println("hello " + vivi);
+		request.setAttribute("vivi", "dfdfd");
+		//System.out.println("hello " + request.getAttribute("vivi"));
+		
+		String url = request.getParameter("url");
+	//	System.out.println("url: " + url);
+		Cookie c = new Cookie("url", url);
+		c.setMaxAge(1000);
+		response.addCookie(c);
+		
 		return "form";
 	}
 	
