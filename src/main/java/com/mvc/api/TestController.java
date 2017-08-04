@@ -47,6 +47,21 @@ public class TestController {
 		return "hello";
 	}
 	
+	@RequestMapping("/vivi")
+	public ModelAndView vivi() {
+		Map<String,Object> model=new HashMap<String,Object>();
+		model.put("flag", true);
+		return new ModelAndView("/vivi", "model", model);
+	}
+	
+	@RequestMapping("/ajax")
+	@ResponseBody
+	public User ajax(String id) {
+		System.out.println("id:"+id);
+		user.setName("vivi");
+		return user;
+	}
+	
 	@RequestMapping("/model")
 	public ModelAndView model() {
 		ModelAndView view = new ModelAndView("hello");
